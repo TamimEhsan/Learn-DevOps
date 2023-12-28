@@ -1,0 +1,19 @@
+version: "3.8"
+services:
+  web:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api2
+  api1:
+    build: ./backend-1
+    # ports:
+    #   - "8080:8080"
+    
+  api2:
+    build: ./backend-2
+    ports:
+      - "8088:8088"
+    depends_on:
+      - api1
