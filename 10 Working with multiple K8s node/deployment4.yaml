@@ -1,0 +1,69 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: echo-server-deployment1
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: echo-server1
+  template:
+    metadata:
+      labels:
+        app: echo-server1
+    spec:
+      containers:
+        - name: echo-server1
+          image: echo-server:latest
+          ports:
+            - containerPort: 3000
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - echo-server1
+              topologyKey: "kubernetes.io/hostname"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: echo-server-deployment2
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: echo-server2
+  template:
+    metadata:
+      labels:
+        app: echo-server2
+    spec:
+      containers:
+        - name: echo-server2
+          image: echo-server:latest
+          ports:
+            - containerPort: 3000
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - echo-server2
+              topologyKey: "kubernetes.io/hostname"
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - echo-server1
+              topologyKey: "kubernetes.io/hostname"
