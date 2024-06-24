@@ -7,6 +7,8 @@ Connect-AzAccount -TenantId <tenant_id> -DeviceCode
 Then Configure kubectl to connect to Kubernetes cluster
 ```
 Import-AzAksCredential -ResourceGroupName tamim-aks -Name myAKSCluster
+or
+az aks get-credentials --resource-group tamim-aks --name myAKSCluster
 ```
 ## Creating docker images
 ```
