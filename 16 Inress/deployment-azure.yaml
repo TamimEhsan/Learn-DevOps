@@ -1,0 +1,107 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aks-helloworld  
+  # namespace: hello-web-app-routing
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aks-helloworld
+  template:
+    metadata:
+      labels:
+        app: aks-helloworld
+    spec:
+      containers:
+      - name: aks-helloworld
+        image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
+        ports:
+        - containerPort: 80
+        env:
+        - name: TITLE
+          value: "Welcome to Tamim er Kubernetes Service (AKS)"
+
+--- 
+apiVersion: v1
+kind: Service
+metadata:
+  name: aks-helloworld
+  # namespace: hello-web-app-routing
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 80
+  selector:
+    app: aks-helloworld
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aks-helloworld-2  
+  # namespace: hello-web-app-routing
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aks-helloworld-2
+  template:
+    metadata:
+      labels:
+        app: aks-helloworld-2
+    spec:
+      containers:
+      - name: aks-helloworld
+        image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
+        ports:
+        - containerPort: 80
+        env:
+        - name: TITLE
+          value: "Welcome to Sabit er Kubernetes Service (AKS)"
+
+--- 
+apiVersion: v1
+kind: Service
+metadata:
+  name: aks-helloworld-2
+  # namespace: hello-web-app-routing
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 80
+  selector:
+    app: aks-helloworld-2
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: aks-helloworld
+  # namespace: hello-web-app-routing
+spec:
+  ingressClassName: webapprouting.kubernetes.azure.com
+  rules:
+  - host: app.tamim.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: aks-helloworld
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  - host: app.sabit.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: aks-helloworld-2
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+

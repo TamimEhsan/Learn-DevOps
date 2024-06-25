@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: echo-server-container
-        image: tamimregistry53.azurecr.io/echo-server:latest # Use the image you built
+        image: tamimcontainerregistry52.azurecr.io/echo-server:latest # Use the image you built
         ports:
         - containerPort: 3000
 ---

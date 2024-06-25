@@ -13,12 +13,12 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "example" {
-  name     = "acr-resource-group"
+  name     = "tamim-resource-group"
   location = "Southeast Asia"
 }
 
 resource "azurerm_container_registry" "example" {
-  name                = "tamimContainerRegistry1"
+  name                = "tamimcontainerregistry52"
   resource_group_name = azurerm_resource_group.example.name
   location            = azurerm_resource_group.example.location
   sku                 = "Basic"
@@ -28,7 +28,7 @@ resource "azurerm_kubernetes_cluster" "example" {
   name                = "tamim-example-aks1"
   location            = azurerm_resource_group.example.location
   resource_group_name = azurerm_resource_group.example.name
-  dns_prefix          = "exampleaks1"
+  dns_prefix          = azurerm_resource_group.example.name
 
   default_node_pool {
     name       = "default"
@@ -41,7 +41,7 @@ resource "azurerm_kubernetes_cluster" "example" {
   }
 
   tags = {
-    Environment = "Production"
+    Environment = "dev"
   }
 }
 
