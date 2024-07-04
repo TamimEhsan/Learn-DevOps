@@ -28,6 +28,8 @@ Finally we can access it from
 ```
 curl --resolve "hello-world.example.com:80:$( minikube ip )" -i http://hello-world.example.com
 ```
+> [!IMPORTANT]
+> It is to be noted that the port mentioned in path is the port exposed by the service of the backend we want to access
 ### Azure
 
 ```

@@ -91,7 +91,7 @@ spec:
           service:
             name: aks-helloworld
             port:
-              number: 80
+              number: 80 # service port
         path: /
         pathType: Prefix
   - host: app.sabit.com
