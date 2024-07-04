@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: init-db-job
+spec:
+  template:
+    spec:
+      containers:
+        - name: init-db
+          image: postgres:16.1-alpine3.19
+          env:
+          - name: POSTGRES_DB
+            value: mydatabase
+          - name: POSTGRES_USER
+            value: myuser
+          - name: POSTGRES_PASSWORD
+            value: mypassword
+          volumeMounts:
+          - name: init-ddl
+            mountPath: /docker-entrypoint-initdb.d
+          command: ['sh', '-c', 'export PGPASSWORD=${POSTGRES_PASSWORD} && psql -h postgres-service -U myuser -d mydatabase -f /docker-entrypoint-initdb.d/init.ddl']
+      restartPolicy: OnFailure
+      volumes:
+      - name: init-ddl
+        configMap:
+          name: init-ddl-config
